@@ -30,7 +30,9 @@ fi
 
 echo "
 Build variables:
+  DockerFile directory: $DOCKERFILE_DIR
   Stratum directory: $STRATUM_ROOT
+  Stratum target: $STRATUM_TARGET
   Build jobs: $JOBS
   Docker image for building: $DOCKER_IMG
   Release build enabled: ${RELEASE_BUILD:-false}
@@ -92,7 +94,7 @@ popd
 
 # Build Stratum BF runtime Docker image
 STRATUM_NAME=$(echo $STRATUM_TARGET | sed 's/_/-/')
-RUNTIME_IMAGE=opennetworking/mn-stratum
+RUNTIME_IMAGE=ederollora/mn-stratum
 echo "Building Stratum runtime image: $RUNTIME_IMAGE"
 set -x
 docker build \

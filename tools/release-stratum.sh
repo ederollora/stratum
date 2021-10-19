@@ -15,8 +15,10 @@ fi
 
 # ---------- Release Variables -------------
 # VERSION=${VERSION:-$(date +%y.%m)}  # 21.03
-VERSION=${VERSION:-0.0.1}
-VERSION_LONG=${VERSION_LONG:-v0.0.1}  # 2021-03-31
+# VERSION=${VERSION:-0.0.1}
+# VERSION_LONG=${VERSION_LONG:-v0.0.1}  # 2021-03-31
+VERSION=${VERSION:-$(date +%y.%m)}  # 21.03
+VERSION_LONG=${VERSION_LONG:-$(date +%Y-%m-%d)}  # 2021-03-31
 STRATUM_DIR=${STRATUM_DIR:-$HOME/stratum-$(date +%Y-%m-%d-%H-%M-%SZ)}
 
 # ---------- Build Variables -------------
@@ -38,11 +40,8 @@ Jobs: $JOBS
 # ---------- Prerequisites -------------
 
 # Log in to Docker Hub
-read -p 'Username: ' DOCKER_USER
-read -sp 'Password: ' DOCKER_PASSWORD
-
-exit 1
-
+read -p 'Docker username: ' DOCKER_USER
+read -sp 'Docker password: ' DOCKER_PASSWORD
 
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
 
@@ -50,6 +49,7 @@ echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
 if [ ! -d $STRATUM_DIR ]; then
   git clone -b ngintent https://github.com/ederollora/stratum.git $STRATUM_DIR
   TEMP_STRATUM_DIR=1
+  echo "Cloned Stratum to temporary directory"
 fi
 cd $STRATUM_DIR
 git tag $VERSION_LONG
@@ -85,18 +85,17 @@ function clean_up_after_build() {
 }
 
 # ---------- Build: BMv2 -------------
-#set -x
-#RELEASE_BUILD=true \
-#  JOBS=${JOBS} \
-#  BAZEL_CACHE=${BAZEL_CACHE} \
-#  DOCKER_IMG=${IMAGE_NAME} \
-#  tools/mininet/build-stratum-bmv2-container.sh
-#docker tag opennetworking/mn-stratum:latest opennetworking/mn-stratum:${VERSION}
-#docker push opennetworking/mn-stratum:${VERSION}
-#docker push opennetworking/mn-stratum:latest
-#cp ./stratum_bmv2_deb.deb $RELEASE_DIR
-#set +x
+set -x
+RELEASE_BUILD=true \
+  JOBS=${JOBS} \
+  BAZEL_CACHE=${BAZEL_CACHE} \
+  DOCKER_IMG=${IMAGE_NAME} \
+  tools/mininet/build-stratum-bmv2-container.sh
+docker tag opennetworking/mn-stratum:latest opennetworking/mn-stratum:${VERSION}
+docker push opennetworking/mn-stratum:${VERSION}
+docker push opennetworking/mn-stratum:latest
+cp ./stratum_bmv2_deb.deb $RELEASE_DIR
+set +x
 
 # ---------- Cleanup -------------
 docker logout
-gh auth logout -h github.com

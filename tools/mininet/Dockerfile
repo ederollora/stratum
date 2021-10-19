@@ -7,7 +7,7 @@
 
 # We use a 2-stage build. Build all tools first, then copy only the strict necessary
 # to a new image with runtime dependencies.
-FROM stratumproject/build:build as builder
+FROM ederollora/stratumbuild:build as builder
 
 ENV BUILD_DEPS \
     python-setuptools \
@@ -28,7 +28,7 @@ RUN python setup.py install --root /output
 # Install `m` utility so user can attach to a mininet host directly
 RUN cp util/m /output/bin/m && sed -i 's#sudo##g' /output/bin/m
 
-# Copy Stratum souce to build additionally needed targets.
+# Copy Stratum source to build additionally needed targets.
 COPY . /tmp/stratum
 WORKDIR /tmp/stratum
 
@@ -73,8 +73,8 @@ RUN pip install --root /output "grpcio<=${GRPC_VER}"
 # Final stage, runtime.
 FROM bitnami/minideb:stretch as runtime
 
-LABEL maintainer="Stratum dev <stratum-dev@lists.stratumproject.org>"
-LABEL description="Docker-based Mininet image that uses stratum_bmv2 as the default switch"
+LABEL maintainer="Eder Ollora <eder@ollora.me>"
+LABEL description="Docker-based Mininet image that uses stratum_bmv2 (modified) as the default switch"
 
 # Mininet and BMv2 simple_switch runtime dependencies
 ENV RUNTIME_DEPS \
