@@ -91,9 +91,9 @@ RELEASE_BUILD=true \
   BAZEL_CACHE=${BAZEL_CACHE} \
   DOCKER_IMG=${IMAGE_NAME} \
   tools/mininet/build-stratum-bmv2-container.sh
-docker tag opennetworking/mn-stratum:latest opennetworking/mn-stratum:${VERSION}
-docker push opennetworking/mn-stratum:${VERSION}
-docker push opennetworking/mn-stratum:latest
+docker tag ederollora/mn-stratum:latest ederollora/mn-stratum:${VERSION}
+docker push ederollora/mn-stratum:${VERSION}
+docker push ederollora/mn-stratum:latest
 cp ./stratum_bmv2_deb.deb $RELEASE_DIR
 set +x
 
