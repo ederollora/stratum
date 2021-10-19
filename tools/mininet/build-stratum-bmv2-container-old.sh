@@ -7,7 +7,7 @@ DOCKERFILE_DIR=$( cd $(dirname "${BASH_SOURCE[0]}") >/dev/null 2>&1 && pwd )
 STRATUM_ROOT=${STRATUM_ROOT:-"$( cd "$DOCKERFILE_DIR/../.." >/dev/null 2>&1 && pwd )"}
 STRATUM_TARGET=stratum_bmv2
 JOBS=${JOBS:-4}
-DOCKER_IMG=${DOCKER_IMG:-ederollora/stratumbuild:build}
+DOCKER_IMG=${DOCKER_IMG:-stratumproject/build:build}
 
 print_help() {
 echo "
@@ -16,7 +16,7 @@ Usage: $0
 Additional environment variables:
     STRATUM_ROOT: The root directory of Stratum.
     JOBS: The number of jobs to run simultaneously while building the base container. (Default: 4)
-    DOCKER_IMG: Docker image to use for building (Default: ederollora/stratumbuild:build)
+    DOCKER_IMG: Docker image to use for building (Default: stratumproject/build:build)
     RELEASE_BUILD: Optimized build with stripped symbols (Default: false)
     BAZEL_CACHE: Path to Bazel cache (Default: <empty>)
 "
